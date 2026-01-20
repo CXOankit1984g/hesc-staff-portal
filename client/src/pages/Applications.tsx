@@ -122,10 +122,6 @@ export default function Applications() {
           <Plus size={18} />
           New Application
         </Button>
-        <Button variant="outline" className="flex gap-2">
-          <Download size={18} />
-          Export
-        </Button>
       </div>
 
       {/* Metrics */}

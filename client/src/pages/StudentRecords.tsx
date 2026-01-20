@@ -110,10 +110,6 @@ export default function StudentRecords() {
           <Plus size={18} />
           New Record
         </Button>
-        <Button variant="outline" gap-2>
-          <Search size={18} />
-          Advanced Search
-        </Button>
       </div>
 
       {/* Metrics */}

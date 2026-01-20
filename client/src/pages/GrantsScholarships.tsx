@@ -119,10 +119,6 @@ export default function GrantsScholarships() {
       {/* Action Buttons */}
       <div className="flex gap-3">
         <NewProgramModal programs={programsData} />
-        <Button variant="outline" className="flex gap-2">
-          <Download size={18} />
-          Export Report
-        </Button>
       </div>
 
       {/* Metrics */}

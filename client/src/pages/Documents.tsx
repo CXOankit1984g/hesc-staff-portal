@@ -284,7 +284,7 @@ export default function Documents() {
           <Upload size={48} className="mx-auto mb-4 text-muted-foreground" />
           <p className="text-lg font-semibold text-foreground mb-2">Drop files here or click to upload</p>
           <p className="text-sm text-muted-foreground mb-4">Supported formats: PDF, PNG, JPG, TIFF</p>
-          <label>
+          <label className="cursor-pointer inline-block">
             <input
               type="file"
               multiple
@@ -292,10 +292,10 @@ export default function Documents() {
               onChange={handleFileInputChange}
               className="hidden"
             />
-            <Button className="bg-primary hover:bg-primary/90 cursor-pointer">
-              <Upload size={18} className="mr-2" />
+            <div className="bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-md font-medium inline-flex items-center gap-2 cursor-pointer transition-colors">
+              <Upload size={18} />
               Upload Documents
-            </Button>
+            </div>
           </label>
         </div>
       </Card>

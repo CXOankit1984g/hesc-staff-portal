@@ -75,15 +75,13 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           {navigationItems.map((item) => {
             const Icon = item.icon;
             return (
-              <Link key={item.href} href={item.href}>
-                <a className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primary/80 transition-colors group">
-                  <Icon size={20} className="flex-shrink-0" />
-                  {sidebarOpen && (
-                    <span className="text-sm font-medium group-hover:font-semibold">
-                      {item.label}
-                    </span>
-                  )}
-                </a>
+              <Link key={item.href} href={item.href} className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primary/80 transition-colors group">
+                <Icon size={20} className="flex-shrink-0" />
+                {sidebarOpen && (
+                  <span className="text-sm font-medium group-hover:font-semibold">
+                    {item.label}
+                  </span>
+                )}
               </Link>
             );
           })}
@@ -91,11 +89,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
         {/* Settings & Logout */}
         <div className="p-4 border-t border-primary/20 space-y-2">
-          <Link href="/settings">
-            <a className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primary/80 transition-colors">
-              <Settings size={20} className="flex-shrink-0" />
-              {sidebarOpen && <span className="text-sm font-medium">Settings</span>}
-            </a>
+          <Link href="/settings" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primary/80 transition-colors">
+            <Settings size={20} className="flex-shrink-0" />
+            {sidebarOpen && <span className="text-sm font-medium">Settings</span>}
           </Link>
           <button className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primary/80 transition-colors text-left">
             <LogOut size={20} className="flex-shrink-0" />

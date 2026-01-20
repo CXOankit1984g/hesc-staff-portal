@@ -8,6 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import ApplicationDetailModal from "@/components/ApplicationDetailModal";
 
 const applicationsData = [
   {
@@ -89,6 +90,13 @@ export default function Applications() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [typeFilter, setTypeFilter] = useState("All");
+  const [selectedApplication, setSelectedApplication] = useState<typeof applicationsData[0] | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleApplicationClick = (app: typeof applicationsData[0]) => {
+    setSelectedApplication(app);
+    setIsModalOpen(true);
+  };
 
   const filteredApplications = applicationsData.filter((app) => {
     const matchesSearch =
@@ -204,7 +212,14 @@ export default function Applications() {
           <tbody>
             {filteredApplications.map((app) => (
               <tr key={app.id} className="border-b border-border hover:bg-gray-50 transition-colors">
-                <td className="py-3 px-4 font-medium text-foreground">{app.id}</td>
+                <td className="py-3 px-4 font-medium text-foreground">
+                  <button
+                    onClick={() => handleApplicationClick(app)}
+                    className="text-primary hover:text-primary/80 hover:underline cursor-pointer"
+                  >
+                    {app.id}
+                  </button>
+                </td>
                 <td className="py-3 px-4">
                   <div>
                     <p className="font-medium text-foreground">{app.student}</p>
@@ -232,7 +247,9 @@ export default function Applications() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem>View Details</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleApplicationClick(app)}>
+                        View Details
+                      </DropdownMenuItem>
                       <DropdownMenuItem>Edit</DropdownMenuItem>
                       <DropdownMenuItem>Change Status</DropdownMenuItem>
                       <DropdownMenuItem className="text-red-600">Delete</DropdownMenuItem>
@@ -244,6 +261,22 @@ export default function Applications() {
           </tbody>
         </table>
       </Card>
+
+      {/* Application Detail Modal */}
+      {selectedApplication && (
+        <ApplicationDetailModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          application={{
+            id: selectedApplication.id,
+            studentName: selectedApplication.student,
+            email: selectedApplication.email,
+            status: selectedApplication.status as "New" | "Under Review" | "Pending" | "Approved" | "Rejected",
+            amount: parseFloat(selectedApplication.amount.replace(/[$,]/g, "")),
+            submittedDate: selectedApplication.submitted,
+          }}
+        />
+      )}
     </div>
   );
 }

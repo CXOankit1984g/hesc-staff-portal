@@ -197,7 +197,7 @@ export default function Applications() {
             <tr className="border-b border-border">
               <th className="text-left py-3 px-4 font-semibold text-foreground">Application ID</th>
               <th className="text-left py-3 px-4 font-semibold text-foreground">Student</th>
-              <th className="text-left py-3 px-4 font-semibold text-foreground">Program Name</th>
+              <th className="text-left py-3 px-4 font-semibold text-foreground">Program</th>
               <th className="text-left py-3 px-4 font-semibold text-foreground">Amount</th>
               <th className="text-left py-3 px-4 font-semibold text-foreground">Status</th>
               <th className="text-left py-3 px-4 font-semibold text-foreground">Priority</th>

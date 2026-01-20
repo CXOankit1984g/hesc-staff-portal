@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Download, Play, Settings } from "lucide-react";
-import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { toast } from "sonner";
+import jsPDF from "jspdf";
 
 const reportsData = [
   {
@@ -84,21 +85,6 @@ const scheduledReports = [
   },
 ];
 
-const applicationStatusData = [
-  { name: "Approved", value: 67.5, fill: "#22c55e" },
-  { name: "Under Review", value: 19.2, fill: "#3b82f6" },
-  { name: "Pending", value: 8.7, fill: "#f59e0b" },
-  { name: "Rejected", value: 4.6, fill: "#ef4444" },
-];
-
-const fundingByProgramData = [
-  { program: "TAP Grant", amount: 125 },
-  { program: "Excelsior", amount: 75 },
-  { program: "Enhanced Tuition", amount: 50 },
-  { program: "STEM Incentive", amount: 25 },
-  { program: "Dream Act", amount: 15 },
-];
-
 export default function Reports() {
   const [selectedYear, setSelectedYear] = useState("2024-2025");
 
@@ -106,6 +92,190 @@ export default function Reports() {
   const dataPointsAnalyzed = 2400000;
   const activeDashboards = 12;
   const scheduledReportsCount = 34;
+
+  const generatePDF = (reportId: number, reportTitle: string) => {
+    try {
+      const doc = new jsPDF();
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      let yPosition = 20;
+
+      // Header
+      doc.setFontSize(20);
+      doc.text("HESC Financial Aid Report", 20, yPosition);
+      yPosition += 10;
+
+      // Report Title
+      doc.setFontSize(14);
+      doc.text(reportTitle, 20, yPosition);
+      yPosition += 8;
+
+      // Report Metadata
+      doc.setFontSize(10);
+      doc.setTextColor(100);
+      doc.text(`Generated: ${new Date().toLocaleDateString()}`, 20, yPosition);
+      yPosition += 5;
+      doc.text(`Academic Year: ${selectedYear}`, 20, yPosition);
+      yPosition += 10;
+
+      // Reset text color
+      doc.setTextColor(0);
+
+      // Report-specific content
+      switch (reportId) {
+        case 1: // Financial Aid Overview
+          doc.setFontSize(12);
+          doc.text("Financial Aid Overview Report", 20, yPosition);
+          yPosition += 8;
+          doc.setFontSize(10);
+          doc.text("Total Applications: 2,847", 20, yPosition);
+          yPosition += 5;
+          doc.text("Approved: 1,923 (67.54%)", 20, yPosition);
+          yPosition += 5;
+          doc.text("Denied: 382 (13.42%)", 20, yPosition);
+          yPosition += 5;
+          doc.text("Under Review: 542 (19.04%)", 20, yPosition);
+          yPosition += 10;
+          doc.text("Total Funding Allocated: $240M", 20, yPosition);
+          yPosition += 5;
+          doc.text("Average Award: $4,847", 20, yPosition);
+          yPosition += 5;
+          doc.text("Total Students: 42,000", 20, yPosition);
+          yPosition += 5;
+          doc.text("Active Students: 37,000", 20, yPosition);
+          break;
+
+        case 2: // Application Analytics
+          doc.setFontSize(12);
+          doc.text("Application Analytics Report", 20, yPosition);
+          yPosition += 8;
+          doc.setFontSize(10);
+          doc.text("Monthly Application Trends:", 20, yPosition);
+          yPosition += 5;
+          doc.text("January: 350 applications, 280 approved", 20, yPosition);
+          yPosition += 4;
+          doc.text("February: 420 applications, 340 approved", 20, yPosition);
+          yPosition += 4;
+          doc.text("March: 480 applications, 410 approved", 20, yPosition);
+          yPosition += 4;
+          doc.text("April: 520 applications, 450 approved", 20, yPosition);
+          yPosition += 4;
+          doc.text("May: 580 applications, 510 approved", 20, yPosition);
+          yPosition += 4;
+          doc.text("June: 650 applications, 600 approved", 20, yPosition);
+          yPosition += 10;
+          doc.text("Average Processing Time: 12.3 days", 20, yPosition);
+          yPosition += 5;
+          doc.text("Approval Rate: 67.54%", 20, yPosition);
+          break;
+
+        case 3: // Funding Distribution
+          doc.setFontSize(12);
+          doc.text("Funding Distribution Report", 20, yPosition);
+          yPosition += 8;
+          doc.setFontSize(10);
+          doc.text("Program Funding Allocation:", 20, yPosition);
+          yPosition += 5;
+          doc.text("TAP Grant Program: $125M (52.08%)", 20, yPosition);
+          yPosition += 4;
+          doc.text("Excelsior Scholarship: $75M (31.25%)", 20, yPosition);
+          yPosition += 4;
+          doc.text("Enhanced Tuition Award: $50M (20.83%)", 20, yPosition);
+          yPosition += 4;
+          doc.text("STEM Incentive Program: $25M (10.42%)", 20, yPosition);
+          yPosition += 4;
+          doc.text("Dream Act Financial Aid: $15M (6.25%)", 20, yPosition);
+          yPosition += 10;
+          doc.text("Total Funding Distributed: $290M", 20, yPosition);
+          break;
+
+        case 4: // Student Demographics
+          doc.setFontSize(12);
+          doc.text("Student Demographics Report", 20, yPosition);
+          yPosition += 8;
+          doc.setFontSize(10);
+          doc.text("Total Students: 42,000", 20, yPosition);
+          yPosition += 5;
+          doc.text("Active Students: 37,000 (88.1%)", 20, yPosition);
+          yPosition += 5;
+          doc.text("Inactive Students: 5,000 (11.9%)", 20, yPosition);
+          yPosition += 10;
+          doc.text("Student Distribution by College:", 20, yPosition);
+          yPosition += 5;
+          doc.text("CUNY: 18,000 students (42.86%)", 20, yPosition);
+          yPosition += 4;
+          doc.text("SUNY: 16,000 students (38.10%)", 20, yPosition);
+          yPosition += 4;
+          doc.text("Private: 8,000 students (19.05%)", 20, yPosition);
+          break;
+
+        case 5: // Program Performance
+          doc.setFontSize(12);
+          doc.text("Program Performance Report", 20, yPosition);
+          yPosition += 8;
+          doc.setFontSize(10);
+          doc.text("TAP Grant Program:", 20, yPosition);
+          yPosition += 4;
+          doc.text("  Applications: 1,200 | Approval Rate: 85%", 20, yPosition);
+          yPosition += 5;
+          doc.text("Excelsior Scholarship:", 20, yPosition);
+          yPosition += 4;
+          doc.text("  Applications: 850 | Approval Rate: 92%", 20, yPosition);
+          yPosition += 5;
+          doc.text("STEM Incentive Program:", 20, yPosition);
+          yPosition += 4;
+          doc.text("  Applications: 580 | Approval Rate: 78%", 20, yPosition);
+          yPosition += 5;
+          doc.text("Dream Act Financial Aid:", 20, yPosition);
+          yPosition += 4;
+          doc.text("  Applications: 217 | Approval Rate: 88%", 20, yPosition);
+          break;
+
+        case 6: // Historical Trends
+          doc.setFontSize(12);
+          doc.text("Historical Trends Report", 20, yPosition);
+          yPosition += 8;
+          doc.setFontSize(10);
+          doc.text("Year-over-Year Comparison:", 20, yPosition);
+          yPosition += 5;
+          doc.text("2025-2026: 2,847 applications", 20, yPosition);
+          yPosition += 4;
+          doc.text("2024-2025: 2,200 applications (+29.4%)", 20, yPosition);
+          yPosition += 4;
+          doc.text("2023-2024: 1,800 applications (+22.2%)", 20, yPosition);
+          yPosition += 10;
+          doc.text("Funding Trends:", 20, yPosition);
+          yPosition += 5;
+          doc.text("2025-2026: $290M allocated", 20, yPosition);
+          yPosition += 4;
+          doc.text("2024-2025: $250M allocated (+16%)", 20, yPosition);
+          yPosition += 4;
+          doc.text("2023-2024: $215M allocated (+16.3%)", 20, yPosition);
+          break;
+
+        default:
+          doc.text("Report data not available", 20, yPosition);
+      }
+
+      // Footer
+      doc.setFontSize(8);
+      doc.setTextColor(150);
+      doc.text(
+        `Page 1 of 1 | ${new Date().toLocaleString()}`,
+        20,
+        pageHeight - 10
+      );
+
+      // Save PDF
+      const fileName = `${reportTitle.replace(/\s+/g, "_")}_${new Date().toISOString().split("T")[0]}.pdf`;
+      doc.save(fileName);
+
+      toast.success(`${reportTitle} downloaded successfully`);
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      toast.error("Failed to generate PDF report");
+    }
+  };
 
   return (
     <div className="p-6 space-y-6">
@@ -170,7 +340,11 @@ export default function Reports() {
                 <span>Last: {report.lastGenerated}</span>
                 <span>Size: {report.size}</span>
               </div>
-              <Button className="w-full bg-primary hover:bg-primary/90 gap-2" size="sm">
+              <Button
+                className="w-full bg-primary hover:bg-primary/90 gap-2"
+                size="sm"
+                onClick={() => generatePDF(report.id, report.title)}
+              >
                 <Play size={16} />
                 Generate
               </Button>
@@ -186,7 +360,7 @@ export default function Reports() {
             <h3 className="text-lg font-semibold text-foreground">Scheduled Reports</h3>
             <p className="text-sm text-muted-foreground">Automated report generation schedule</p>
           </div>
-          <Button variant="outline" gap-2 size="sm">
+          <Button variant="outline" className="gap-2" size="sm">
             <Settings size={16} />
             Manage Schedule
           </Button>
@@ -208,71 +382,6 @@ export default function Reports() {
               </span>
             </div>
           ))}
-        </div>
-      </Card>
-
-      {/* Report Preview */}
-      <Card className="p-6">
-        <h3 className="text-lg font-semibold mb-6 text-foreground">Report Preview</h3>
-        <p className="text-sm text-muted-foreground mb-6">Interactive preview of selected report data</p>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Application Status */}
-          <div className="border border-border rounded-lg p-4">
-            <h4 className="font-semibold text-foreground mb-4">Application Status</h4>
-            <ResponsiveContainer width="100%" height={250}>
-              <PieChart>
-                <Pie
-                  data={applicationStatusData}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={({ name, value }) => `${name}: ${value}%`}
-                  outerRadius={80}
-                  fill="#8884d8"
-                  dataKey="value"
-                >
-                  {applicationStatusData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.fill} />
-                  ))}
-                </Pie>
-                <Tooltip formatter={(value: any) => `${value}%`} />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-
-          {/* Funding by Program */}
-          <div className="border border-border rounded-lg p-4">
-            <h4 className="font-semibold text-foreground mb-4">Funding by Program</h4>
-            <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={fundingByProgramData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                <XAxis dataKey="program" stroke="#6b7280" />
-                <YAxis stroke="#6b7280" />
-                <Tooltip formatter={(value: any) => `$${value}M`} />
-                <Bar dataKey="amount" fill="#0B5A66" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
-        {/* Key Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-          <Card className="p-4 bg-gray-50">
-            <p className="text-sm text-muted-foreground mb-1">Processing Time</p>
-            <p className="text-2xl font-bold text-foreground">12.3 days</p>
-            <p className="text-xs text-green-600 mt-1">↓ 2.1 days from last month</p>
-          </Card>
-          <Card className="p-4 bg-gray-50">
-            <p className="text-sm text-muted-foreground mb-1">Approval Rate</p>
-            <p className="text-2xl font-bold text-foreground">78.9%</p>
-            <p className="text-xs text-green-600 mt-1">↑ 3.2% from last month</p>
-          </Card>
-          <Card className="p-4 bg-gray-50">
-            <p className="text-sm text-muted-foreground mb-1">Avg. Award</p>
-            <p className="text-2xl font-bold text-foreground">$4,847</p>
-            <p className="text-xs text-green-600 mt-1">↑ $234 from last month</p>
-          </Card>
         </div>
       </Card>
     </div>

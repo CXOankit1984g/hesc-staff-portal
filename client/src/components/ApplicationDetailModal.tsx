@@ -35,12 +35,6 @@ interface ApplicationDetailModalProps {
   };
 }
 
-interface WorkflowStage {
-  id: string;
-  label: string;
-  status: "completed" | "current" | "upcoming";
-}
-
 export default function ApplicationDetailModal({
   isOpen,
   onClose,
@@ -49,32 +43,6 @@ export default function ApplicationDetailModal({
   const [currentStatus, setCurrentStatus] = useState(application.status);
   const [reviewerComments, setReviewerComments] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
-
-  // Define workflow stages based on current path
-  const getWorkflowStages = (): WorkflowStage[] => {
-    const baseStages: WorkflowStage[] = [
-      { id: "new", label: "New", status: "completed" },
-      { id: "under-review", label: "Under Review", status: "completed" },
-    ];
-
-    if (
-      currentStatus === "Pending" ||
-      currentStatus === "Approved" ||
-      currentStatus === "Rejected"
-    ) {
-      if (currentStatus === "Pending") {
-        baseStages.push({ id: "pending", label: "Pending (Needs Info)", status: "current" });
-      } else if (currentStatus === "Approved") {
-        baseStages.push({ id: "approved", label: "Approved", status: "current" });
-      } else if (currentStatus === "Rejected") {
-        baseStages.push({ id: "rejected", label: "Rejected", status: "current" });
-      }
-    }
-
-    return baseStages;
-  };
-
-  const workflowStages = getWorkflowStages();
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -90,19 +58,6 @@ export default function ApplicationDetailModal({
         return "bg-red-100 text-red-800";
       default:
         return "bg-gray-100 text-gray-800";
-    }
-  };
-
-  const getStageIcon = (status: string) => {
-    switch (status) {
-      case "completed":
-        return <CheckCircle className="w-5 h-5 text-green-600" />;
-      case "current":
-        return <Clock className="w-5 h-5 text-blue-600" />;
-      case "upcoming":
-        return <AlertCircle className="w-5 h-5 text-gray-400" />;
-      default:
-        return null;
     }
   };
 
@@ -179,68 +134,21 @@ export default function ApplicationDetailModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl">
             Application Details - {application.id}
           </DialogTitle>
+          <div className="mt-2">
+            <Badge className={`${getStatusColor(currentStatus)}`}>
+              {currentStatus}
+            </Badge>
+          </div>
         </DialogHeader>
-
-        {/* Case Workflow Visualization */}
-        <div className="bg-gradient-to-r from-blue-50 to-teal-50 p-6 rounded-lg border border-blue-200 mb-6">
-          <h3 className="text-sm font-semibold text-gray-700 mb-4">
-            Case Workflow Status
-          </h3>
-          <div className="flex items-center justify-between">
-            {workflowStages.map((stage, index) => (
-              <div key={stage.id} className="flex items-center flex-1">
-                <div className="flex flex-col items-center">
-                  <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                      stage.status === "completed"
-                        ? "bg-green-100"
-                        : stage.status === "current"
-                        ? "bg-blue-100"
-                        : "bg-gray-100"
-                    }`}
-                  >
-                    {getStageIcon(stage.status)}
-                  </div>
-                  <p className="text-xs font-medium text-gray-700 mt-2 text-center">
-                    {stage.label}
-                  </p>
-                </div>
-                {index < workflowStages.length - 1 && (
-                  <div
-                    className={`flex-1 h-1 mx-2 ${
-                      stage.status === "completed"
-                        ? "bg-green-400"
-                        : "bg-gray-300"
-                    }`}
-                  />
-                )}
-              </div>
-            ))}
-          </div>
-          <div className="mt-4 flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600">Current Status:</p>
-              <Badge className={`mt-1 ${getStatusColor(currentStatus)}`}>
-                {currentStatus}
-              </Badge>
-            </div>
-            <div className="text-right">
-              <p className="text-sm text-gray-600">Submitted:</p>
-              <p className="text-sm font-medium text-gray-900">
-                {application.submittedDate}
-              </p>
-            </div>
-          </div>
-        </div>
 
         {/* Tabs */}
         <Tabs defaultValue="personal" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-5">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="personal">Personal</TabsTrigger>
             <TabsTrigger value="education">Education</TabsTrigger>
             <TabsTrigger value="eligibility">Eligibility</TabsTrigger>
@@ -637,21 +545,21 @@ export default function ApplicationDetailModal({
             disabled={isProcessing || currentStatus === "Approved"}
             className="flex-1 bg-teal-600 hover:bg-teal-700 text-white"
           >
-            {isProcessing ? "Processing..." : "Approve Application"}
+            {isProcessing ? "Processing..." : "Approve"}
           </Button>
           <Button
             onClick={handlePending}
             disabled={isProcessing || currentStatus === "Pending"}
             className="flex-1 bg-blue-900 hover:bg-blue-950 text-white"
           >
-            {isProcessing ? "Processing..." : "Pending - Request Information"}
+            {isProcessing ? "Processing..." : "Request Info"}
           </Button>
           <Button
             onClick={handleDecline}
             disabled={isProcessing || currentStatus === "Rejected"}
             className="flex-1 bg-red-600 hover:bg-red-700 text-white"
           >
-            {isProcessing ? "Processing..." : "Decline Application"}
+            {isProcessing ? "Processing..." : "Decline"}
           </Button>
         </div>
       </DialogContent>

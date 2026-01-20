@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation } from "wouter";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Download, Plus, MoreVertical } from "lucide-react";
@@ -84,6 +85,7 @@ const statusColors = {
 };
 
 export default function GrantsScholarships() {
+  const [, setLocation] = useLocation();
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [typeFilter, setTypeFilter] = useState("All");
@@ -206,7 +208,12 @@ export default function GrantsScholarships() {
               <tr key={program.id} className="border-b border-border hover:bg-gray-50 transition-colors">
                 <td className="py-3 px-4">
                   <div>
-                    <p className="font-medium text-foreground">{program.name}</p>
+                    <button
+                      onClick={() => setLocation(`/program-detail?id=${program.id}`)}
+                      className="font-medium text-primary hover:underline cursor-pointer"
+                    >
+                      {program.name}
+                    </button>
                     <p className="text-xs text-muted-foreground">{program.id}</p>
                     <p className="text-xs text-muted-foreground">{program.description}</p>
                   </div>

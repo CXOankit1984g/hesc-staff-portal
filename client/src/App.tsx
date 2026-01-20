@@ -14,8 +14,8 @@ import Programs from "./pages/Programs";
 import Documents from "./pages/Documents";
 import Help from "./pages/Help";
 import College from "./pages/College";
+import ProgramDetail from "./pages/ProgramDetail";
 import DashboardLayout from "./components/DashboardLayout";
-
 
 function Router() {
   return (
@@ -25,6 +25,7 @@ function Router() {
         <Route path={"/applications"} component={Applications} />
         <Route path={"/student-records"} component={StudentRecords} />
         <Route path={"/grants-scholarships"} component={GrantsScholarships} />
+        <Route path={"/program-detail"} component={ProgramDetail} />
         <Route path={"/reports"} component={Reports} />
         <Route path={"/settings"} component={Settings} />
         <Route path={"/programs"} component={Programs} />

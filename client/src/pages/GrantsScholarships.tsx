@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useLocation } from "wouter";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Download, Plus, MoreVertical } from "lucide-react";
+import { Download, MoreVertical } from "lucide-react";
+import NewProgramModal from "@/components/NewProgramModal";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -117,11 +118,8 @@ export default function GrantsScholarships() {
 
       {/* Action Buttons */}
       <div className="flex gap-3">
-        <Button className="bg-primary hover:bg-primary/90 gap-2">
-          <Plus size={18} />
-          New Program
-        </Button>
-        <Button variant="outline" gap-2>
+        <NewProgramModal programs={programsData} />
+        <Button variant="outline" className="flex gap-2">
           <Download size={18} />
           Export Report
         </Button>

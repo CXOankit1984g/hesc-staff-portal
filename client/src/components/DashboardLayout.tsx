@@ -70,7 +70,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       {/* Sidebar */}
       <aside
         className={`${
-          sidebarOpen ? "w-64" : "w-20"
+          sidebarOpen ? "w-80" : "w-20"
         } bg-primary text-primary-foreground transition-all duration-300 flex flex-col border-r border-primary/20`}
       >
         {/* Logo Area */}

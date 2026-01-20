@@ -255,41 +255,7 @@ export default function Help() {
         </div>
       </div>
 
-      {/* Contact Section */}
-      <Card className="p-8 bg-primary/5 border-primary/20">
-        <div className="text-center space-y-4">
-          <h2 className="text-2xl font-bold text-foreground">Still Need Help?</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Our support team is available to assist you. Contact us through any of the following channels.
-          </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-            <div className="space-y-2">
-              <Mail size={24} className="mx-auto text-primary" />
-              <p className="font-semibold text-foreground">Email</p>
-              <a href="mailto:support@hesc.edu" className="text-primary hover:underline">
-                support@hesc.edu
-              </a>
-            </div>
-
-            <div className="space-y-2">
-              <Phone size={24} className="mx-auto text-primary" />
-              <p className="font-semibold text-foreground">Phone</p>
-              <a href="tel:1-888-697-4372" className="text-primary hover:underline">
-                1-888-697-4372
-              </a>
-            </div>
-
-            <div className="space-y-2">
-              <MessageSquare size={24} className="mx-auto text-primary" />
-              <p className="font-semibold text-foreground">Live Chat</p>
-              <button className="text-primary hover:underline">Start Chat</button>
-            </div>
-          </div>
-
-          <Button className="mt-6">Submit Support Ticket</Button>
-        </div>
-      </Card>
     </div>
   );
 }

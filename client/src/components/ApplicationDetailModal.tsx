@@ -39,6 +39,7 @@ interface WorkflowStage {
   id: string;
   label: string;
   status: "completed" | "current" | "upcoming";
+  description?: string;
 }
 
 export default function ApplicationDetailModal({
@@ -52,23 +53,39 @@ export default function ApplicationDetailModal({
 
   // Define workflow stages based on current path
   const getWorkflowStages = (): WorkflowStage[] => {
+    // Always start with New and Under Review as completed
     const baseStages: WorkflowStage[] = [
-      { id: "new", label: "New", status: "completed" },
-      { id: "under-review", label: "Under Review", status: "completed" },
+      { id: "new", label: "New", status: "completed", description: "Application submitted" },
+      { id: "under-review", label: "Under Review", status: "completed", description: "Being reviewed by staff" },
     ];
 
-    if (
-      currentStatus === "Pending" ||
-      currentStatus === "Approved" ||
-      currentStatus === "Rejected"
-    ) {
-      if (currentStatus === "Pending") {
-        baseStages.push({ id: "pending", label: "Pending (Needs Info)", status: "current" });
-      } else if (currentStatus === "Approved") {
-        baseStages.push({ id: "approved", label: "Approved", status: "current" });
-      } else if (currentStatus === "Rejected") {
-        baseStages.push({ id: "rejected", label: "Rejected", status: "current" });
-      }
+    // Add the final stage based on current status
+    if (currentStatus === "New") {
+      // If still new, show Under Review as upcoming
+      baseStages[1].status = "current";
+    } else if (currentStatus === "Under Review") {
+      baseStages[1].status = "current";
+    } else if (currentStatus === "Pending") {
+      baseStages.push({ 
+        id: "pending", 
+        label: "Pending (Needs Info)", 
+        status: "current",
+        description: "Awaiting additional information from applicant"
+      });
+    } else if (currentStatus === "Approved") {
+      baseStages.push({ 
+        id: "approved", 
+        label: "Approved", 
+        status: "current",
+        description: "Application has been approved"
+      });
+    } else if (currentStatus === "Rejected") {
+      baseStages.push({ 
+        id: "rejected", 
+        label: "Rejected", 
+        status: "current",
+        description: "Application has been rejected"
+      });
     }
 
     return baseStages;
@@ -96,11 +113,11 @@ export default function ApplicationDetailModal({
   const getStageIcon = (status: string) => {
     switch (status) {
       case "completed":
-        return <CheckCircle className="w-5 h-5 text-green-600" />;
+        return <CheckCircle className="w-6 h-6 text-green-600" />;
       case "current":
-        return <Clock className="w-5 h-5 text-blue-600" />;
+        return <Clock className="w-6 h-6 text-blue-600" />;
       case "upcoming":
-        return <AlertCircle className="w-5 h-5 text-gray-400" />;
+        return <AlertCircle className="w-6 h-6 text-gray-400" />;
       default:
         return null;
     }
@@ -179,60 +196,83 @@ export default function ApplicationDetailModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-2xl">
+      <DialogContent className="max-w-7xl max-h-[95vh] overflow-y-auto">
+        <DialogHeader className="sticky top-0 bg-white z-10 pb-4">
+          <DialogTitle className="text-3xl">
             Application Details - {application.id}
           </DialogTitle>
         </DialogHeader>
 
-        {/* Case Workflow Visualization */}
-        <div className="bg-gradient-to-r from-blue-50 to-teal-50 p-6 rounded-lg border border-blue-200 mb-6">
-          <h3 className="text-sm font-semibold text-gray-700 mb-4">
-            Case Workflow Status
+        {/* Case Workflow Visualization - Enhanced */}
+        <div className="bg-gradient-to-r from-blue-50 via-teal-50 to-blue-50 p-8 rounded-lg border-2 border-blue-200 mb-6">
+          <h3 className="text-lg font-bold text-gray-800 mb-6">
+            📊 Case Workflow Status
           </h3>
-          <div className="flex items-center justify-between">
+          
+          {/* Workflow Steps */}
+          <div className="flex items-stretch justify-between gap-2 mb-8">
             {workflowStages.map((stage, index) => (
-              <div key={stage.id} className="flex items-center flex-1">
-                <div className="flex flex-col items-center">
-                  <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                      stage.status === "completed"
-                        ? "bg-green-100"
-                        : stage.status === "current"
-                        ? "bg-blue-100"
-                        : "bg-gray-100"
-                    }`}
-                  >
-                    {getStageIcon(stage.status)}
-                  </div>
-                  <p className="text-xs font-medium text-gray-700 mt-2 text-center">
-                    {stage.label}
-                  </p>
+              <div key={stage.id} className="flex-1 flex flex-col items-center">
+                {/* Stage Circle */}
+                <div
+                  className={`w-16 h-16 rounded-full flex items-center justify-center mb-3 transition-all ${
+                    stage.status === "completed"
+                      ? "bg-green-100 ring-2 ring-green-400"
+                      : stage.status === "current"
+                      ? "bg-blue-100 ring-2 ring-blue-500 scale-110"
+                      : "bg-gray-100 ring-2 ring-gray-300"
+                  }`}
+                >
+                  {getStageIcon(stage.status)}
                 </div>
+                
+                {/* Stage Label */}
+                <p className="text-sm font-bold text-gray-800 text-center mb-1">
+                  {stage.label}
+                </p>
+                
+                {/* Stage Description */}
+                {stage.description && (
+                  <p className="text-xs text-gray-600 text-center max-w-24">
+                    {stage.description}
+                  </p>
+                )}
+
+                {/* Connector Line */}
                 {index < workflowStages.length - 1 && (
                   <div
-                    className={`flex-1 h-1 mx-2 ${
+                    className={`absolute mt-20 w-12 h-1 ${
                       stage.status === "completed"
                         ? "bg-green-400"
                         : "bg-gray-300"
                     }`}
+                    style={{
+                      left: `calc(${((index + 1) / workflowStages.length) * 100}% - 24px)`,
+                    }}
                   />
                 )}
               </div>
             ))}
           </div>
-          <div className="mt-4 flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600">Current Status:</p>
-              <Badge className={`mt-1 ${getStatusColor(currentStatus)}`}>
+
+          {/* Status Summary */}
+          <div className="grid grid-cols-3 gap-4 pt-6 border-t-2 border-blue-200">
+            <div className="text-center">
+              <p className="text-xs font-semibold text-gray-600 uppercase">Current Status</p>
+              <Badge className={`mt-2 text-sm py-1 px-3 ${getStatusColor(currentStatus)}`}>
                 {currentStatus}
               </Badge>
             </div>
-            <div className="text-right">
-              <p className="text-sm text-gray-600">Submitted:</p>
-              <p className="text-sm font-medium text-gray-900">
+            <div className="text-center">
+              <p className="text-xs font-semibold text-gray-600 uppercase">Submitted Date</p>
+              <p className="text-sm font-medium text-gray-900 mt-2">
                 {application.submittedDate}
+              </p>
+            </div>
+            <div className="text-center">
+              <p className="text-xs font-semibold text-gray-600 uppercase">Application Amount</p>
+              <p className="text-sm font-medium text-gray-900 mt-2">
+                ${application.amount.toLocaleString()}
               </p>
             </div>
           </div>
@@ -240,7 +280,7 @@ export default function ApplicationDetailModal({
 
         {/* Tabs */}
         <Tabs defaultValue="personal" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-5">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="personal">Personal</TabsTrigger>
             <TabsTrigger value="education">Education</TabsTrigger>
             <TabsTrigger value="eligibility">Eligibility</TabsTrigger>
@@ -631,25 +671,25 @@ export default function ApplicationDetailModal({
         </Tabs>
 
         {/* Action Buttons */}
-        <div className="flex gap-3 mt-6 pt-6 border-t">
+        <div className="flex gap-3 mt-8 pt-6 border-t sticky bottom-0 bg-white">
           <Button
             onClick={handleApprove}
             disabled={isProcessing || currentStatus === "Approved"}
-            className="flex-1 bg-teal-600 hover:bg-teal-700 text-white"
+            className="flex-1 bg-teal-600 hover:bg-teal-700 text-white text-base py-6"
           >
             {isProcessing ? "Processing..." : "Approve Application"}
           </Button>
           <Button
             onClick={handlePending}
             disabled={isProcessing || currentStatus === "Pending"}
-            className="flex-1 bg-blue-900 hover:bg-blue-950 text-white"
+            className="flex-1 bg-blue-900 hover:bg-blue-950 text-white text-base py-6"
           >
             {isProcessing ? "Processing..." : "Pending - Request Information"}
           </Button>
           <Button
             onClick={handleDecline}
             disabled={isProcessing || currentStatus === "Rejected"}
-            className="flex-1 bg-red-600 hover:bg-red-700 text-white"
+            className="flex-1 bg-red-600 hover:bg-red-700 text-white text-base py-6"
           >
             {isProcessing ? "Processing..." : "Decline Application"}
           </Button>

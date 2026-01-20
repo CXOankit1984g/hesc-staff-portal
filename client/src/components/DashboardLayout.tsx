@@ -65,7 +65,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         {/* Logo Area */}
         <div className="p-4 border-b border-primary/20 flex items-center justify-between">
           <div className={`flex items-center gap-2 ${!sidebarOpen && "justify-center w-full"}`}>
-            <img src="/images/ny-logo.png" alt="New York State" className="w-10 h-10" />
+            <img src="/images/hesc-logo.png" alt="HESC" className="w-10 h-10" />
             {sidebarOpen && <span className="font-bold text-lg">HESC</span>}
           </div>
         </div>

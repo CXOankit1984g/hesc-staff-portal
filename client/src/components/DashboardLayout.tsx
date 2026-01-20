@@ -32,7 +32,7 @@ interface DashboardLayoutProps {
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [currentPersona, setCurrentPersona] = useState("Executive");
+  const [currentPersona, setCurrentPersona] = useState("Administrator");
 
   const personas = [
     "Support Staff",
@@ -42,7 +42,15 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     "Executive",
   ];
 
-  const navigationItems = [
+  const roleMenuMap: Record<string, string[]> = {
+    "Administrator": ["Dashboard", "Applications", "Student Records", "Grants & Scholarships", "Reports", "Documents", "College", "Help"],
+    "Support Staff": ["Applications", "Help"],
+    "Staff": ["Applications", "Student Records", "Help"],
+    "Program Manager": ["Applications", "Student Records", "Grants & Scholarships", "Reports", "Help"],
+    "Executive": ["Dashboard", "Reports", "Help"],
+  };
+
+  const allNavigationItems = [
     { label: "Dashboard", href: "/", icon: BarChart3 },
     { label: "Applications", href: "/applications", icon: FileText },
     { label: "Student Records", href: "/student-records", icon: GraduationCap },
@@ -52,6 +60,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     { label: "College", href: "/college", icon: Building2 },
     { label: "Help", href: "/help", icon: HelpCircle },
   ];
+
+  const navigationItems = allNavigationItems.filter((item) =>
+    roleMenuMap[currentPersona].includes(item.label)
+  );
 
   return (
     <div className="flex h-screen bg-background">

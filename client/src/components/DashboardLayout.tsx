@@ -74,7 +74,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         } bg-primary text-primary-foreground transition-all duration-300 flex flex-col border-r border-primary/20`}
       >
         {/* Logo Area */}
-        <div className="p-4 border-b border-primary/20 flex items-center justify-center">
+        <div className="p-4 border-b border-primary/20 flex items-center justify-start">
           {sidebarOpen ? (
             <img src="/images/hesc-logo.png" alt="HESC" className="h-12 w-auto" />
           ) : (

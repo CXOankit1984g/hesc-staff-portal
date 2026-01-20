@@ -86,12 +86,12 @@ const scheduledReports = [
 ];
 
 export default function Reports() {
-  const [selectedYear, setSelectedYear] = useState("2024-2025");
+  const [selectedYear, setSelectedYear] = useState("2025-2026");
 
   const reportsGenerated = 847;
-  const dataPointsAnalyzed = 2400000;
-  const activeDashboards = 12;
-  const scheduledReportsCount = 34;
+  const dataPointsAnalyzed = 16000;
+  const activeDashboards = 5;
+  const scheduledReportsCount = 4;
 
   const generatePDF = (reportId: number, reportTitle: string) => {
     try {
@@ -292,14 +292,11 @@ export default function Reports() {
           onChange={(e) => setSelectedYear(e.target.value)}
           className="px-3 py-2 border border-border rounded-lg text-sm bg-white"
         >
+          <option>2025-2026</option>
           <option>2024-2025</option>
           <option>2023-2024</option>
           <option>2022-2023</option>
         </select>
-        <Button className="bg-primary hover:bg-primary/90 gap-2">
-          <Download size={18} />
-          Generate Report
-        </Button>
       </div>
 
       {/* Metrics */}

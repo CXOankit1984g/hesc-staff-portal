@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Upload, Download, Eye, AlertCircle, CheckCircle, Clock, X } from "lucide-react";
+import { detectDocumentType, validateField, DocumentTemplate } from "@/lib/documentTemplates";
 
 interface ProcessedDocument {
   id: string;
@@ -59,50 +60,76 @@ const processedDocumentsData: ProcessedDocument[] = [
   },
 ];
 
-// Mock document parser - simulates parsing different document types
+// Enhanced document parser using templates
 const parseDocument = (file: File): ProcessedDocument => {
   const id = Date.now().toString();
   const filename = file.name;
   
-  // Simulate document type detection
-  let type = "Unknown Document";
-  if (filename.toLowerCase().includes("fafsa")) type = "FAFSA";
-  else if (filename.toLowerCase().includes("tax")) type = "Tax Return";
-  else if (filename.toLowerCase().includes("transcript")) type = "Academic Transcript";
-  else if (filename.toLowerCase().includes("income")) type = "Income Statement";
-  else if (filename.toLowerCase().includes("verification")) type = "Verification Document";
+  // Detect document type using template keywords
+  const template = detectDocumentType(filename);
+  const type = template?.type || "Unknown Document";
   
-  // Simulate extracted fields based on document type
+  // Generate extracted fields based on template
   const extractedFields: Array<{ name: string; value: string; confidence: number }> = [];
+  const issues: string[] = [];
   
-  // Common fields for all documents
-  extractedFields.push(
-    { name: "Student Name", value: "Jane Doe", confidence: 96 },
-    { name: "SSN", value: "987-65-4321", confidence: 94 }
-  );
-  
-  // Type-specific fields
-  if (type === "FAFSA") {
+  if (template) {
+    // Use template fields to generate realistic mock data
+    const mockValues: { [key: string]: { value: string; confidence: number } } = {
+      // FAFSA
+      studentName: { value: "Jane Doe", confidence: 96 },
+      ssn: { value: "987-65-4321", confidence: 94 },
+      dateOfBirth: { value: "05/15/2000", confidence: 92 },
+      expectedFamilyContribution: { value: "$4,500", confidence: 93 },
+      filingStatus: { value: "Single", confidence: 95 },
+      totalIncome: { value: "$45,000", confidence: 91 },
+      dependencyStatus: { value: "Dependent", confidence: 98 },
+      numberOfFamilyMembers: { value: "4", confidence: 89 },
+      
+      // Tax Return
+      taxYear: { value: "2023", confidence: 99 },
+      adjustedGrossIncome: { value: "$68,500", confidence: 92 },
+      taxableIncome: { value: "$55,000", confidence: 90 },
+      totalTaxes: { value: "$8,250", confidence: 88 },
+      spouseSSN: { value: "N/A", confidence: 100 },
+      
+      // Transcript
+      studentID: { value: "STU-987654", confidence: 95 },
+      institution: { value: "University of New York", confidence: 98 },
+      gpa: { value: "3.72", confidence: 96 },
+      currentProgram: { value: "Bachelor of Science in Computer Science", confidence: 97 },
+      enrollmentStatus: { value: "Full-time", confidence: 99 },
+      creditsEarned: { value: "120", confidence: 94 },
+      creditsAttempted: { value: "124", confidence: 93 },
+      degreeConferred: { value: "N/A", confidence: 100 },
+    };
+    
+    // Add fields from template
+    template.fields.forEach((field) => {
+      const mockData = mockValues[field.name];
+      if (mockData) {
+        extractedFields.push({
+          name: field.label,
+          value: mockData.value,
+          confidence: mockData.confidence,
+        });
+        
+        // Validate field
+        const validation = validateField(field, mockData.value);
+        if (!validation.valid && validation.error) {
+          issues.push(`${field.label}: ${validation.error}`);
+        }
+      } else if (field.required) {
+        issues.push(`Missing required field: ${field.label}`);
+      }
+    });
+  } else {
+    // Fallback for unknown document types
     extractedFields.push(
-      { name: "Expected Family Contribution", value: "$4,500", confidence: 93 },
-      { name: "Filing Status", value: "Single", confidence: 95 }
+      { name: "Student Name", value: "Jane Doe", confidence: 96 },
+      { name: "SSN", value: "987-65-4321", confidence: 94 }
     );
-  } else if (type === "Tax Return") {
-    extractedFields.push(
-      { name: "Filing Status", value: "Head of Household", confidence: 97 },
-      { name: "Total Income", value: "$72,000", confidence: 94 },
-      { name: "Adjusted Gross Income", value: "$68,500", confidence: 92 }
-    );
-  } else if (type === "Academic Transcript") {
-    extractedFields.push(
-      { name: "Institution", value: "University of New York", confidence: 98 },
-      { name: "GPA", value: "3.72", confidence: 96 }
-    );
-  } else if (type === "Income Statement") {
-    extractedFields.push(
-      { name: "Total Income", value: "$95,000", confidence: 91 },
-      { name: "Adjusted Gross Income", value: "$88,000", confidence: 89 }
-    );
+    issues.push("Document type not recognized. Please verify extracted data manually.");
   }
   
   return {
@@ -113,7 +140,7 @@ const parseDocument = (file: File): ProcessedDocument => {
     uploadedTime: "just now",
     progress: 0,
     extractedFields,
-    issues: [],
+    issues: issues.length > 0 ? issues : undefined,
   };
 };
 
@@ -182,6 +209,11 @@ export default function Documents() {
     setDocuments((prev) => prev.filter((doc) => doc.id !== id));
   };
 
+  const getTemplateInfo = (type: string): DocumentTemplate | null => {
+    const template = detectDocumentType(type);
+    return template || null;
+  };
+
   const getStatusBadge = (status: string, progress?: number) => {
     switch (status) {
       case "completed":
@@ -221,7 +253,23 @@ export default function Documents() {
       {/* Upload Section */}
       <Card className="p-8">
         <h2 className="text-lg font-semibold text-foreground mb-2">Upload Documents</h2>
-        <p className="text-sm text-muted-foreground mb-6">Drag and drop or click to upload PDF, images, or documents. Supported formats: PDF, PNG, JPG, TIFF</p>
+        <p className="text-sm text-muted-foreground mb-4">Drag and drop or click to upload PDF, images, or documents. Supported formats: PDF, PNG, JPG, TIFF</p>
+        
+        {/* Supported Templates Info */}
+        <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <p className="text-sm font-semibold text-blue-900 mb-2">Supported Document Templates:</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="text-sm text-blue-800">
+              <span className="font-medium">FAFSA</span> - Extracts student info, EFC, income, filing status
+            </div>
+            <div className="text-sm text-blue-800">
+              <span className="font-medium">Tax Returns</span> - Extracts income, AGI, filing status, tax data
+            </div>
+            <div className="text-sm text-blue-800">
+              <span className="font-medium">Transcripts</span> - Extracts GPA, institution, enrollment status, credits
+            </div>
+          </div>
+        </div>
 
         <div
           onDragOver={handleDragOver}

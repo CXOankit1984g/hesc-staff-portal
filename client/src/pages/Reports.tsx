@@ -308,7 +308,7 @@ export default function Reports() {
         </Card>
         <Card className="p-4 border-l-4 border-l-blue-500">
           <p className="text-sm text-muted-foreground">Data Points Analyzed</p>
-          <p className="text-2xl font-bold text-foreground">{(dataPointsAnalyzed / 1000000).toFixed(1)}M</p>
+          <p className="text-2xl font-bold text-foreground">{(dataPointsAnalyzed / 1000).toFixed(0)}K</p>
           <p className="text-xs text-green-600 mt-1">+15% This Quarter</p>
         </Card>
         <Card className="p-4 border-l-4 border-l-green-500">

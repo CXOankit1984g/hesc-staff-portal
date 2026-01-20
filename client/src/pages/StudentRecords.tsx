@@ -92,8 +92,9 @@ export default function StudentRecords() {
     return matchesSearch && matchesCollege && matchesStatus;
   });
 
-  const totalStudents = studentRecordsData.length;
-  const activeStudents = studentRecordsData.filter((s) => s.status === "Active").length;
+  const totalStudents = 42000; // 42K
+  const activeStudents = 37000; // 37K
+  const totalAidDistributed = 240000000; // $240M
 
   return (
     <div className="p-6 space-y-6">
@@ -119,15 +120,15 @@ export default function StudentRecords() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card className="p-4 border-l-4 border-l-primary">
           <p className="text-sm text-muted-foreground">Total Students</p>
-          <p className="text-2xl font-bold text-foreground">{totalStudents}</p>
+          <p className="text-2xl font-bold text-foreground">{(totalStudents / 1000).toFixed(0)}K</p>
         </Card>
         <Card className="p-4 border-l-4 border-l-green-500">
           <p className="text-sm text-muted-foreground">Active Students</p>
-          <p className="text-2xl font-bold text-foreground">{activeStudents}</p>
+          <p className="text-2xl font-bold text-foreground">{(activeStudents / 1000).toFixed(0)}K</p>
         </Card>
         <Card className="p-4 border-l-4 border-l-accent">
           <p className="text-sm text-muted-foreground">Total Aid Distributed</p>
-          <p className="text-2xl font-bold text-foreground">$30.5K</p>
+          <p className="text-2xl font-bold text-foreground">${(totalAidDistributed / 1000000).toFixed(0)}M</p>
         </Card>
       </div>
 

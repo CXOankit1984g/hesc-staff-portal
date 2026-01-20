@@ -4,35 +4,35 @@ import { Button } from "@/components/ui/button";
 import { Users, CheckCircle, XCircle, DollarSign, TrendingUp } from "lucide-react";
 
 const applicationsTrendData = [
-  { month: "Jan", applications: 120, approved: 90, denied: 30 },
-  { month: "Feb", applications: 140, approved: 105, denied: 35 },
-  { month: "Mar", applications: 160, approved: 125, denied: 35 },
-  { month: "Apr", applications: 180, approved: 140, denied: 40 },
-  { month: "May", applications: 200, approved: 160, denied: 40 },
-  { month: "Jun", applications: 220, approved: 180, denied: 40 },
+  { month: "Jan", applications: 350, approved: 280, denied: 70 },
+  { month: "Feb", applications: 420, approved: 340, denied: 80 },
+  { month: "Mar", applications: 480, approved: 410, denied: 70 },
+  { month: "Apr", applications: 520, approved: 450, denied: 70 },
+  { month: "May", applications: 580, approved: 510, denied: 70 },
+  { month: "Jun", applications: 650, approved: 600, denied: 50 },
 ];
 
 const applicationsByStatusData = [
-  { name: "Approved", value: 177, fill: "#22c55e" },
+  { name: "Approved", value: 1923, fill: "#22c55e" },
   { name: "Under Review", value: 542, fill: "#3b82f6" },
-  { name: "Pending", value: 174, fill: "#f59e0b" },
-  { name: "Rejected", value: 127, fill: "#ef4444" },
+  { name: "Pending", value: 0, fill: "#f59e0b" },
+  { name: "Rejected", value: 382, fill: "#ef4444" },
 ];
 
 const programPerformanceData = [
-  { program: "TAP Grant", applications: 450, approvalRate: 85 },
-  { program: "Excelsior", applications: 320, approvalRate: 92 },
-  { program: "STEM", applications: 180, approvalRate: 78 },
-  { program: "Dream Act", applications: 70, approvalRate: 88 },
+  { program: "TAP Grant", applications: 1200, approvalRate: 85 },
+  { program: "Excelsior", applications: 850, approvalRate: 92 },
+  { program: "STEM", applications: 580, approvalRate: 78 },
+  { program: "Dream Act", applications: 217, approvalRate: 88 },
 ];
 
 const disbursementData = [
-  { month: "Jan", amount: 450000 },
-  { month: "Feb", amount: 520000 },
-  { month: "Mar", amount: 680000 },
-  { month: "Apr", amount: 750000 },
-  { month: "May", amount: 890000 },
-  { month: "Jun", amount: 950000 },
+  { month: "Jan", amount: 1200000 },
+  { month: "Feb", amount: 1400000 },
+  { month: "Mar", amount: 1800000 },
+  { month: "Apr", amount: 2100000 },
+  { month: "May", amount: 2500000 },
+  { month: "Jun", amount: 2800000 },
 ];
 
 export default function Dashboard() {
@@ -40,7 +40,7 @@ export default function Dashboard() {
     <div className="p-6 space-y-6">
       {/* Header */}
       <div className="space-y-2">
-        <h1 className="text-3xl font-bold text-foreground">Executive Dashboard</h1>
+        <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
         <p className="text-muted-foreground">
           Comprehensive overview of all financial aid applications and programs
         </p>
@@ -51,6 +51,7 @@ export default function Dashboard() {
         <div className="flex items-center gap-2">
           <label className="text-sm font-medium">Academic Year</label>
           <select className="px-3 py-2 border border-border rounded-lg text-sm bg-white">
+            <option>2025-2026</option>
             <option>2024-2025</option>
             <option>2023-2024</option>
             <option>2022-2023</option>
@@ -83,7 +84,7 @@ export default function Dashboard() {
           <div className="flex items-start justify-between">
             <div>
               <p className="text-sm text-muted-foreground mb-1">Total Applications</p>
-              <p className="text-3xl font-bold text-foreground">1020</p>
+              <p className="text-3xl font-bold text-foreground">2,847</p>
               <p className="text-xs text-muted-foreground mt-2">All submitted applications</p>
             </div>
             <Users className="text-primary" size={24} />
@@ -94,8 +95,8 @@ export default function Dashboard() {
           <div className="flex items-start justify-between">
             <div>
               <p className="text-sm text-muted-foreground mb-1">Approved</p>
-              <p className="text-3xl font-bold text-foreground">177</p>
-              <p className="text-xs text-muted-foreground mt-2">17.35% approval rate</p>
+              <p className="text-3xl font-bold text-foreground">1,923</p>
+              <p className="text-xs text-muted-foreground mt-2">67.54% approval rate</p>
             </div>
             <CheckCircle className="text-green-500" size={24} />
           </div>
@@ -105,7 +106,7 @@ export default function Dashboard() {
           <div className="flex items-start justify-between">
             <div>
               <p className="text-sm text-muted-foreground mb-1">Denied</p>
-              <p className="text-3xl font-bold text-foreground">174</p>
+              <p className="text-3xl font-bold text-foreground">382</p>
               <p className="text-xs text-muted-foreground mt-2">Applications rejected</p>
             </div>
             <XCircle className="text-red-500" size={24} />

@@ -118,11 +118,11 @@ export default function Applications() {
 
       {/* Action Buttons */}
       <div className="flex gap-3">
-        <Button className="bg-primary hover:bg-primary/90 gap-2">
+        <Button className="bg-primary hover:bg-primary/90 flex gap-2">
           <Plus size={18} />
           New Application
         </Button>
-        <Button variant="outline" gap-2>
+        <Button variant="outline" className="flex gap-2">
           <Download size={18} />
           Export
         </Button>

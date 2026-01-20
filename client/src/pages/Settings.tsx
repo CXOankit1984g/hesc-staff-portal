@@ -1,8 +1,47 @@
+import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Save } from "lucide-react";
 
 export default function Settings() {
+  const [preferences, setPreferences] = useState({
+    emailNotifications: true,
+    dataExport: true,
+    applicationUpdates: true,
+    reportGeneration: true,
+    systemAlerts: true,
+  });
+
+  const togglePreference = (key: keyof typeof preferences) => {
+    setPreferences((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
+
+  const ToggleButton = ({
+    isOn,
+    onChange,
+  }: {
+    isOn: boolean;
+    onChange: () => void;
+  }) => (
+    <button
+      onClick={onChange}
+      className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors ${
+        isOn
+          ? "bg-teal-600 hover:bg-teal-700"
+          : "bg-amber-500 hover:bg-amber-600"
+      }`}
+    >
+      <span
+        className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform ${
+          isOn ? "translate-x-7" : "translate-x-1"
+        }`}
+      />
+    </button>
+  );
+
   return (
     <div className="p-6 space-y-6">
       {/* Header */}
@@ -17,7 +56,9 @@ export default function Settings() {
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-foreground mb-2">First Name</label>
+              <label className="block text-sm font-medium text-foreground mb-2">
+                First Name
+              </label>
               <input
                 type="text"
                 placeholder="Admin"
@@ -25,7 +66,9 @@ export default function Settings() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-foreground mb-2">Last Name</label>
+              <label className="block text-sm font-medium text-foreground mb-2">
+                Last Name
+              </label>
               <input
                 type="text"
                 placeholder="User"
@@ -34,7 +77,9 @@ export default function Settings() {
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-foreground mb-2">Email</label>
+            <label className="block text-sm font-medium text-foreground mb-2">
+              Email
+            </label>
             <input
               type="email"
               placeholder="admin@hesc.ny.gov"
@@ -42,7 +87,9 @@ export default function Settings() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-foreground mb-2">Role</label>
+            <label className="block text-sm font-medium text-foreground mb-2">
+              Role
+            </label>
             <select className="w-full px-4 py-2 border border-border rounded-lg text-sm bg-white">
               <option>Administrator</option>
               <option>Program Manager</option>
@@ -59,63 +106,78 @@ export default function Settings() {
 
       {/* System Preferences */}
       <Card className="p-6">
-        <h3 className="text-lg font-semibold mb-4 text-foreground">System Preferences</h3>
+        <h3 className="text-lg font-semibold mb-4 text-foreground">
+          System Preferences
+        </h3>
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium text-foreground">Email Notifications</p>
-              <p className="text-sm text-muted-foreground">Receive email alerts for important updates</p>
+              <p className="text-sm text-muted-foreground">
+                Receive email alerts for important updates
+              </p>
             </div>
-            <input type="checkbox" defaultChecked className="w-5 h-5" />
-          </div>
-          <div className="border-t border-border pt-4 flex items-center justify-between">
-            <div>
-              <p className="font-medium text-foreground">Two-Factor Authentication</p>
-              <p className="text-sm text-muted-foreground">Enhance account security</p>
-            </div>
-            <input type="checkbox" className="w-5 h-5" />
+            <ToggleButton
+              isOn={preferences.emailNotifications}
+              onChange={() => togglePreference("emailNotifications")}
+            />
           </div>
           <div className="border-t border-border pt-4 flex items-center justify-between">
             <div>
               <p className="font-medium text-foreground">Data Export</p>
-              <p className="text-sm text-muted-foreground">Allow automated data exports</p>
+              <p className="text-sm text-muted-foreground">
+                Allow automated data exports
+              </p>
             </div>
-            <input type="checkbox" defaultChecked className="w-5 h-5" />
+            <ToggleButton
+              isOn={preferences.dataExport}
+              onChange={() => togglePreference("dataExport")}
+            />
           </div>
         </div>
       </Card>
 
       {/* Notification Settings */}
       <Card className="p-6">
-        <h3 className="text-lg font-semibold mb-4 text-foreground">Notification Settings</h3>
+        <h3 className="text-lg font-semibold mb-4 text-foreground">
+          Notification Settings
+        </h3>
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium text-foreground">Application Updates</p>
-              <p className="text-sm text-muted-foreground">Notify when applications are updated</p>
+              <p className="text-sm text-muted-foreground">
+                Notify when applications are updated
+              </p>
             </div>
-            <input type="checkbox" defaultChecked className="w-5 h-5" />
-          </div>
-          <div className="border-t border-border pt-4 flex items-center justify-between">
-            <div>
-              <p className="font-medium text-foreground">Payment Confirmations</p>
-              <p className="text-sm text-muted-foreground">Notify when payments are processed</p>
-            </div>
-            <input type="checkbox" defaultChecked className="w-5 h-5" />
+            <ToggleButton
+              isOn={preferences.applicationUpdates}
+              onChange={() => togglePreference("applicationUpdates")}
+            />
           </div>
           <div className="border-t border-border pt-4 flex items-center justify-between">
             <div>
               <p className="font-medium text-foreground">Report Generation</p>
-              <p className="text-sm text-muted-foreground">Notify when reports are ready</p>
+              <p className="text-sm text-muted-foreground">
+                Notify when reports are ready
+              </p>
             </div>
-            <input type="checkbox" defaultChecked className="w-5 h-5" />
+            <ToggleButton
+              isOn={preferences.reportGeneration}
+              onChange={() => togglePreference("reportGeneration")}
+            />
           </div>
           <div className="border-t border-border pt-4 flex items-center justify-between">
             <div>
               <p className="font-medium text-foreground">System Alerts</p>
-              <p className="text-sm text-muted-foreground">Notify about system maintenance and issues</p>
+              <p className="text-sm text-muted-foreground">
+                Notify about system maintenance and issues
+              </p>
             </div>
-            <input type="checkbox" defaultChecked className="w-5 h-5" />
+            <ToggleButton
+              isOn={preferences.systemAlerts}
+              onChange={() => togglePreference("systemAlerts")}
+            />
           </div>
         </div>
       </Card>
@@ -125,7 +187,9 @@ export default function Settings() {
         <h3 className="text-lg font-semibold mb-4 text-foreground">Security</h3>
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-foreground mb-2">Current Password</label>
+            <label className="block text-sm font-medium text-foreground mb-2">
+              Current Password
+            </label>
             <input
               type="password"
               placeholder="••••••••"
@@ -133,7 +197,9 @@ export default function Settings() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-foreground mb-2">New Password</label>
+            <label className="block text-sm font-medium text-foreground mb-2">
+              New Password
+            </label>
             <input
               type="password"
               placeholder="••••••••"
@@ -141,7 +207,9 @@ export default function Settings() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-foreground mb-2">Confirm Password</label>
+            <label className="block text-sm font-medium text-foreground mb-2">
+              Confirm Password
+            </label>
             <input
               type="password"
               placeholder="••••••••"
@@ -152,16 +220,6 @@ export default function Settings() {
             <Save size={18} />
             Update Password
           </Button>
-        </div>
-      </Card>
-
-      {/* Danger Zone */}
-      <Card className="p-6 border-red-200 bg-red-50">
-        <h3 className="text-lg font-semibold mb-4 text-red-900">Danger Zone</h3>
-        <p className="text-sm text-red-700 mb-4">These actions cannot be undone.</p>
-        <div className="flex gap-3">
-          <Button variant="destructive">Clear Cache</Button>
-          <Button variant="destructive">Reset to Defaults</Button>
         </div>
       </Card>
     </div>

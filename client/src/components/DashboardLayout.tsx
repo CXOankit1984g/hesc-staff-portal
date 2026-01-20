@@ -48,7 +48,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     { label: "Student Records", href: "/student-records", icon: GraduationCap },
     { label: "Grants & Scholarships", href: "/grants-scholarships", icon: Cog },
     { label: "Reports", href: "/reports", icon: BarChart3 },
-    { label: "Programs", href: "/programs", icon: Cog },
     { label: "Documents", href: "/documents", icon: Folder },
     { label: "College", href: "/college", icon: Building2 },
     { label: "Help", href: "/help", icon: HelpCircle },

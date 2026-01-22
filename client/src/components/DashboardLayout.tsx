@@ -38,12 +38,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     "Support Staff",
     "Staff",
     "Program Manager",
-    "Administrator",
     "Executive",
+    "Administrator",
   ];
 
   const roleMenuMap: Record<string, string[]> = {
-    "Administrator": ["Dashboard", "Applications", "Student Records", "Grants & Scholarships", "Reports", "Documents", "College", "Help"],
+    "Administrator": ["Dashboard", "Applications", "Grants & Scholarships", "Reports", "Documents", "Student Records", "College", "Help"],
     "Support Staff": ["Applications", "Help"],
     "Staff": ["Applications", "Student Records", "Help"],
     "Program Manager": ["Applications", "Student Records", "Grants & Scholarships", "Reports", "Help"],
@@ -52,11 +52,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   const allNavigationItems = [
     { label: "Dashboard", href: "/", icon: BarChart3 },
-    { label: "Applications", href: "/applications", icon: FileText },
-    { label: "Student Records", href: "/student-records", icon: GraduationCap },
+    { label: "Applications", href: "/applications", icon: FileText },    
     { label: "Grants & Scholarships", href: "/grants-scholarships", icon: Cog },
     { label: "Reports", href: "/reports", icon: BarChart3 },
     { label: "Documents", href: "/documents", icon: Folder },
+    { label: "Student Records", href: "/student-records", icon: GraduationCap },
     { label: "College", href: "/college", icon: Building2 },
     { label: "Help", href: "/help", icon: HelpCircle },
   ];

@@ -101,7 +101,7 @@ export default function StudentRecords() {
       {/* Header */}
       <div className="space-y-2">
         <h1 className="text-3xl font-bold text-foreground">Student Records</h1>
-        <p className="text-muted-foreground">Manage and review student financial aid records</p>
+        <p className="text-muted-foreground">Manage and review student records</p>
       </div>
 
       {/* Action Buttons */}

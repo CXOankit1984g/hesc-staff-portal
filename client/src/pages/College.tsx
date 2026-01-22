@@ -87,7 +87,7 @@ const mockColleges: College[] = [
   },
   {
     id: "2",
-    name: "State University of New York",
+    name: "SUNY, Albany",
     code: "SUNY-001",
     status: "active",
     address: {

@@ -135,7 +135,7 @@ export default function Help() {
           <div className="flex items-start gap-4">
             <Video size={32} className="text-primary flex-shrink-0" />
             <div>
-              <h3 className="font-semibold text-foreground mb-1">Video Tutorials</h3>
+              <h3 className="font-semibold text-foreground mb-1">Tutorials</h3>
               <p className="text-sm text-muted-foreground">Watch step-by-step tutorials on key features</p>
             </div>
           </div>
